@@ -2,7 +2,7 @@
 .SYNOPSIS
 Pings a class C ip-range and checks if a host is up or down
 .DESCRIPTION
-The script wil ping each address in the range that's given. Don't forget the "." at the end of the IP and the spaces between the range ;)
+The script will ping each address in the range that's given. Don't forget the "." at the end of the IP and the spaces between the range ;)
 .EXAMPLE
 .\PingHosts.ps1 [ipsubnet] [startrange] [endrange]
 .\PingHosts.ps1 192.168.1. 1 254
@@ -21,11 +21,13 @@ Write-Host "$logo" -ForegroundColor Blue
 $ip = $args[0]
 $range1 = $args[1]
 $range2 = $args[2]
+Start-Transcript -path logfile.txt
 foreach ($i in ($range1..$range2)){
-    if (Test-Connection -ComputerName $ip$i -Count 2 -Quiet -InformationAction ignore) {
-        Write-Host "$ip$i is up en running!" -ForegroundColor Green
+    if (Test-Connection -ComputerName $ip$i -Count 2 -Quiet 6> $null) {
+        Write-Host "$ip$i is up and running!" -ForegroundColor Green
     }
     else {
         Write-Host "$ip$i is down!" -ForegroundColor Red
     }
 }
+Stop-Transcript
